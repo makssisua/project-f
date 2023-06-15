@@ -4,7 +4,9 @@ const passwordCharacterValidationError = (str) => {
   return `Пароль повинен містити принаймні 1 ${str}`;
 };
 
-export const loginValidationSchema = yup.object({
+export const signupValidationSchema = yup.object({
+  firstName: yup.string().required('Ім\'я є обов’язковим полем'),
+  lastName: yup.string().required('Прізвище є обов’язковим полем'),
   email: yup
   .string()
   .email('Eлектронна адреса має бути дійсною')
@@ -16,4 +18,5 @@ export const loginValidationSchema = yup.object({
   .matches(/[0-9]/, passwordCharacterValidationError("цифру"))
   .matches(/[a-zа-я]/, passwordCharacterValidationError("маленьку літеру"))
   .matches(/[[A-ZА-Я]/, passwordCharacterValidationError("велику літеру")),
+  confirmPassword: yup.string().oneOf([yup.ref('password'), null], "Паролі не збігаються"),
 }).required();

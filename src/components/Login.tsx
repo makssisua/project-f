@@ -13,22 +13,19 @@ function Login() {
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  const onSubmit: SubmitHandler<LoginInputs> = (date: LoginInputs) => {
-    console.log('-->', date)
-  };
-
-  const togglePasswordVisibility = ():void => {
-    setIsPasswordVisible((prevState: boolean) => !prevState);
-  }
+  const onSubmit: SubmitHandler<LoginInputs> = (date: LoginInputs) => { console.log('-->', date) };
+  const togglePasswordVisibility = (): void => { setIsPasswordVisible((prevState: boolean) => !prevState) };
 
   return (
     <div className="w-full max-w-xs">
-      <form 
+      <div className="text-center mb-10 mt-10 text-5xl font-bold text-blue-500">Project-F</div>
+      <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" 
+        className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
         action="POST"
       >
         <h1 className='text-gray-900 text-lg font-bold mb-2 text-center'>Авторизація</h1>
+        
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
             Електрона пошта
@@ -36,42 +33,43 @@ function Login() {
           <input
             {...register("email")}
             aria-invalid={errors.email ? "true" : "false"}
-            className="shadow appearance-none border rounded w-full py-2 px-3 mb-1 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-            id="email" 
-            placeholder="Email" 
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            id="email"
+            placeholder="Email"
+            type='email'
           />
           <p className='text-red-600 text-xs'>{errors.email?.message}</p>
         </div>
-        <div className="mb-6">
+        <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
             Пароль
           </label>
           <div className="relative w-full">
             <div className="absolute inset-y-0 right-0 flex items-center px-2">
-              <input className="hidden js-password-toggle" id="toggle" type="checkbox" />
+              <input className="hidden" id="toggle" type="checkbox" />
               <label
-               className="bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer" 
-               htmlFor="toggle"
-               onClick={togglePasswordVisibility}
+                className="bg-gray-300 hover:bg-gray-400 rounded px-2 py-1 text-sm text-gray-600 font-mono cursor-pointer"
+                htmlFor="toggle"
+                onClick={togglePasswordVisibility}
               >
-                {isPasswordVisible ? <IconPasswordHidde  height='20px'/> : <IconPasswordVisible height='20px'/>}
+                {isPasswordVisible ? <IconPasswordHidde height='20px' /> : <IconPasswordVisible height='20px' />}
               </label>
             </div>
             <input
               {...register("password")}
               aria-invalid={errors.password ? "true" : "false"}
-              className="shadow appearance-none border rounded w-full py2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
-              id="password" 
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="password"
               placeholder="Пароль"
-              type={ isPasswordVisible ? 'text' : 'password' }
+              type={isPasswordVisible ? 'text' : 'password'}
             />
           </div>
           <p className='text-red-600 text-xs'>{errors.password?.message}</p>
         </div>
         <div className="flex flex-col items-center">
-          <input 
+          <input
             className="mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            type="submit" 
+            type="submit"
             value="Увійти"
           />
           <p>
