@@ -1,6 +1,7 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
-const trainingsRoutes = require('./routes/trainingRoutes')
+require('dotenv').config();
+const trainingsRoutes = require('./routes/trainingRoutes');
+const usersRoutes = require('./routes/userRoutes')
 const { errorHendler } = require('./middleware/errorMiddleware');
 const { connectDB } = require('./config/db');
 const port = process.env.SERVER_PORT || 5000;
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/trainings', trainingsRoutes);
+app.use('/api/users', usersRoutes);
 
 app.use(errorHendler);
 
