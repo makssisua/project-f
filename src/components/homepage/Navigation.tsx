@@ -1,5 +1,5 @@
 import React from 'react'
-import IconLogo from '../assets/IconLogo'
+import IconLogo from '../../assets/IconLogo'
 
 export default function Navigation() {
   const userInfo = false;
