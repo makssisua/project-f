@@ -1,8 +1,14 @@
 import React from 'react'
+import Navigation from './Navigation'
+import SideBar from './SideBar'
 
 function Home() {
   return (
-    <div>Home</div>
+    <>
+      <Navigation />
+      <SideBar />
+      <div className='sm:pl-60'>Content...</div>
+    </>
   )
 }
 
