@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,7 +7,7 @@ import IconPasswordHidde from '../assets/IconPasswordHidden';
 import IconPasswordVisible from '../assets/IconPasswordVisible';
 
 
-function Login() {
+function Login(): ReactElement {
   const { register, handleSubmit, formState: { errors } } = useForm<LoginInputs>({
     resolver: yupResolver(loginValidationSchema)
   });

@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 import IconLogo from '../../assets/IconLogo'
 
-export default function Navigation() {
+export default function Navigation(): ReactElement  {
   const userInfo = false;
 
   return (

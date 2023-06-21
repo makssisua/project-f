@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { ReactElement } from 'react'
 
-function UserStatusIndicator() {
+function UserStatusIndicator(): ReactElement {
   const userPaymentStatus = true;
   return (
     <div>
