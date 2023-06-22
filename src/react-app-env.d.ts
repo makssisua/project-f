@@ -9,28 +9,30 @@ interface LoginInputs {
 interface SignupInputs extends LoginInputs {
   firstName: string;
   lastName: string;
-  confirmPassword: string | undefined;
+  confirmPassword?: string | undefined;
 };
 
-interface userRegistration {
-  firstName: sting;
-  lastName: sting;
-  email: sting;
-  password: sting;
+interface SignupValidation extends SignupInputs {
+  confirmPassword: string | undefined;
 }
 
 interface User {
-  _id: string;
+  __id: string;
   firstName: string;
   lastName: string
   email: string;
   role: string;
-  paymentStatus: string;
+  token: string;
 };
 
-interface UserData {
-  __id: string;
-  name: string;
-  email: string;
-  token: string;
+interface GlobalState {
+  auth: AuthState
+};
+
+interface AuthState {
+  user: User | null
+  isError: boolean;
+  isSuccess: boolean;
+  isLoading: boolean;
+  message: string;
 };
