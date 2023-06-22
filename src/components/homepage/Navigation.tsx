@@ -1,8 +1,20 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useMemo } from 'react'
 import IconLogo from '../../assets/IconLogo'
+import { useSelector, useDispatch } from 'react-redux';
+import { logout, reset } from '../../store/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 export default function Navigation(): ReactElement  {
-  const userInfo = false;
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const  { user } = useSelector((state: GlobalState) => state.auth)
+  console.log('--->', user)
+
+  const handleLogout = () => {
+    dispatch(logout())
+    dispatch(reset())
+    navigate('/login')
+  };
 
   return (
     <nav className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -21,29 +33,31 @@ export default function Navigation(): ReactElement  {
             </a>
           </div>
           <div className="flex items-center">
-           {!userInfo &&
-             <>
-              <a 
-                href="http://localhost:3000/login" 
-                className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-              >
-                Увійти
-              </a>
-              <a 
-                href="http://localhost:3000/signup" 
-                className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              >
-                Реєстрація
-              </a>
-             </>
-           }
-           {userInfo && 
-            <a 
-              href="/" 
-              className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
-            >
-              Вийти
-            </a>
+           {!user 
+            ? (
+                <>
+                  <a 
+                    href="http://localhost:3000/login" 
+                    className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                  >
+                    Увійти
+                  </a>
+                  <a 
+                    href="http://localhost:3000/signup" 
+                    className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                  >
+                    Реєстрація
+                  </a>
+                </>
+            ) 
+            : (
+                <button 
+                  onClick={handleLogout}
+                  className="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 py-2 md:px-5 md:py-2.5 mr-1 md:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800"
+                >
+                  Вийти
+                </button>
+            )    
            }
           </div>
         </div>

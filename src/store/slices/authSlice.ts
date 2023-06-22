@@ -1,16 +1,8 @@
-import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk, PayloadAction, CaseReducer } from '@reduxjs/toolkit'
 import authServices from '../../services/authServices';
 
-interface AuthState {
-  user: UserData | null
-  isError: boolean;
-  isSuccess: boolean;
-  isLoading: boolean;
-  message: string;
-};
-
 const storedUser = localStorage.getItem('user');
-const user: UserData | null = storedUser ? JSON.parse(storedUser) : null;
+const user: User | null = storedUser ? JSON.parse(storedUser) : null;
 
 const initialState: AuthState = {
   user: user,
@@ -21,7 +13,7 @@ const initialState: AuthState = {
 };
 
 // Register user
-export const registerUser: any = createAsyncThunk('auth/register', async (user: userRegistration, { rejectWithValue }) => {
+export const registerUser: any = createAsyncThunk('auth/register', async (user: SignupInputs, { rejectWithValue }) => {
   try {
     return await authServices.register(user)
   } catch (error: any) {
@@ -34,6 +26,10 @@ export const registerUser: any = createAsyncThunk('auth/register', async (user: 
     return rejectWithValue(message);
   }
 });
+
+export const logout: any = createAsyncThunk('auth/logout', async () => {
+  return authServices.logout();
+})
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -51,15 +47,15 @@ export const authSlice = createSlice({
     .addCase(registerUser.pending, (state) => {
       state.isLoading = true
     })
-    .addCase(registerUser.fulfilled, (state, actions: any) => {
+    .addCase(registerUser.fulfilled, (state, actions) => {
       state.isLoading = false
       state.isSuccess = true
       state.user = actions.payload
     })
-    .addCase(registerUser.rejected, (state, actions: any) => {
+    .addCase(registerUser.rejected, (state, action) => {
       state.isLoading = false
       state.isError = true
-      state.message = actions.payload
+      state.message = action.payload
       state.user = null
     })
   }

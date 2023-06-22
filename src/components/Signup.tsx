@@ -11,7 +11,7 @@ import { registerUser, reset } from '../store/slices/authSlice';
 
 
 function Signup(): ReactElement {
-  const { register, handleSubmit, formState: { errors } } = useForm<SignupInputs>({
+  const { register, handleSubmit, formState: { errors } } = useForm<SignupValidation>({
     resolver: yupResolver(signupValidationSchema)
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -20,7 +20,7 @@ function Signup(): ReactElement {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state: any) => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useSelector((state: GlobalState) => state.auth);
  
   useEffect(() => {
     if(isError){
@@ -37,7 +37,7 @@ function Signup(): ReactElement {
   const onSubmit: SubmitHandler<SignupInputs> = (date: SignupInputs) => { 
     const { firstName, lastName, email, password } = date
     console.log('-->', date) 
-    const userDataFromInputs: userRegistration = {
+    const userDataFromInputs: SignupInputs = {
       firstName,
       lastName,
       email,

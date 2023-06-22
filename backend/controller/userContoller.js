@@ -43,10 +43,12 @@ const registerUser = asyncHandler(async (req, res) => {
 
   if (user) {
     res.status(201).json({
-      __id: user.id,
-      name: `${user.firstName} ${user.lastName}`,
+      __id: user.id.toString(),
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
-      token: generateToken(user.id, user.role)
+      role: user.role,
+      token: generateToken(user.id, user.role).toString()
     })
   } else {
     res.status(400);
