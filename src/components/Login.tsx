@@ -1,10 +1,12 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { loginValidationSchema } from './validation/loginValidation';
 import IconPasswordHidde from '../assets/IconPasswordHidden';
 import IconPasswordVisible from '../assets/IconPasswordVisible';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
+import { loginUser } from '../store/slices/authSlice';
 
 
 function Login(): ReactElement {
@@ -12,8 +14,34 @@ function Login(): ReactElement {
     resolver: yupResolver(loginValidationSchema)
   });
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [authError, setAuthError] = useState<string>('')
 
-  const onSubmit: SubmitHandler<LoginInputs> = (date: LoginInputs) => { console.log('-->', date) };
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const { user, isError, isSuccess, message } = useAppSelector((state: GlobalState) => state.auth);
+ 
+  useEffect(() => {
+    if(isError){
+      setAuthError(message)
+    };
+
+    if (isSuccess || user) {
+      navigate('/')
+    };
+
+  }, [user, isError, isSuccess, message, navigate, dispatch]);
+
+  const onSubmit: SubmitHandler<LoginInputs> = (date: LoginInputs) => {
+    const { email, password } = date;
+
+    const userDataFromInputs: LoginInputs = {
+      email,
+      password
+    };
+
+    dispatch(loginUser(userDataFromInputs))
+   };
   const togglePasswordVisibility = (): void => { setIsPasswordVisible((prevState: boolean) => !prevState) };
 
   return (
@@ -65,6 +93,7 @@ function Login(): ReactElement {
             />
           </div>
           <p className='text-red-600 text-xs'>{errors.password?.message}</p>
+          <p className='text-red-600 text-xs'>{authError}</p>
         </div>
         <div className="flex flex-col items-center">
           <input

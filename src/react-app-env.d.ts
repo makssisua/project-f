@@ -22,6 +22,7 @@ interface User {
   lastName: string
   email: string;
   role: string;
+  paymentStatus: string;
   token: string;
 };
 

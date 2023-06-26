@@ -12,7 +12,7 @@ const generateToken = (id, role) => {
 
 // @desc Register new user
 // @route POST /api/users
-// @access Private
+// @access Public
 const registerUser = asyncHandler(async (req, res) => {
   const { firstName, lastName, email, password } =  req.body;
 
@@ -47,6 +47,7 @@ const registerUser = asyncHandler(async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
+      paymentStatus: user.paymentStatus,
       role: user.role,
       token: generateToken(user.id, user.role).toString()
     })
@@ -58,7 +59,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 // @desc Login a user
 // @route POST /api/users/login
-// @access Private
+// @access Public
 const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
@@ -67,10 +68,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
-      __id: user.id,
-      name: `${user.firstName} ${user.lastName}`,
+      __id: user.id.toString(),
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
-      token: generateToken(user.id, user.role)
+      paymentStatus: user.paymentStatus,
+      role: user.role,
+      token: generateToken(user.id, user.role).toString()
     })
   } else {
     res.status(400);

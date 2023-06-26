@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk, PayloadAction, CaseReducer } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authServices from '../../services/authServices';
 
 const storedUser = localStorage.getItem('user');
@@ -13,7 +13,7 @@ const initialState: AuthState = {
 };
 
 // Register user
-export const registerUser: any = createAsyncThunk('auth/register', async (user: SignupInputs, { rejectWithValue }) => {
+export const registerUser = createAsyncThunk('auth/register', async (user: SignupInputs, { rejectWithValue }) => {
   try {
     return await authServices.register(user)
   } catch (error: any) {
@@ -27,9 +27,40 @@ export const registerUser: any = createAsyncThunk('auth/register', async (user: 
   }
 });
 
-export const logout: any = createAsyncThunk('auth/logout', async () => {
+// Login user
+export const loginUser = createAsyncThunk('auth/login', async (user: LoginInputs, { rejectWithValue }) => {
+  try {
+    return await authServices.login(user)
+  } catch (error: any) {
+    const message =
+      (error.response &&
+        error.response.data &&
+        error.response.data.message) ||
+      error.message ||
+      error.toString();
+    return rejectWithValue(message);
+  }
+});
+
+export const logout = createAsyncThunk('auth/logout', async () => {
   return authServices.logout();
-})
+});
+
+export const getMe = createAsyncThunk('auth/getMe', async (token: string, { rejectWithValue }) => {
+  try {
+    return await authServices.getMe(token);
+  } catch (error: any) {
+    localStorage.removeItem('user');
+    const message =
+      (error.response &&
+        error.response.data &&
+        error.response.data.message) ||
+      error.message ||
+      error.toString();
+
+    return rejectWithValue(message)
+  }
+});
 
 export const authSlice = createSlice({
   name: 'auth',
@@ -40,6 +71,9 @@ export const authSlice = createSlice({
       state.isLoading = false
       state.isSuccess = false
       state.message = ''
+    },
+    updateUserInfo: (state: AuthState, action) => {
+      state.user = action.payload
     }
   },
   extraReducers: (builder) => {
@@ -47,19 +81,36 @@ export const authSlice = createSlice({
     .addCase(registerUser.pending, (state) => {
       state.isLoading = true
     })
-    .addCase(registerUser.fulfilled, (state, actions) => {
+    .addCase(registerUser.fulfilled, (state, actions: any) => {
       state.isLoading = false
       state.isSuccess = true
       state.user = actions.payload
     })
-    .addCase(registerUser.rejected, (state, action) => {
+    .addCase(registerUser.rejected, (state, action: any) => {
       state.isLoading = false
       state.isError = true
       state.message = action.payload
       state.user = null
     })
+    .addCase(loginUser.pending, (state) => {
+      state.isLoading = true
+    })
+    .addCase(loginUser.fulfilled, (state, actions: any) => {
+      state.isLoading = false
+      state.isSuccess = true
+      state.user = actions.payload
+    })
+    .addCase(loginUser.rejected, (state, action: any) => {
+      state.isLoading = false
+      state.isError = true
+      state.message = action.payload
+      state.user = null
+    })
+    .addCase(logout.fulfilled, (state, actions: any) => {
+      state.user = null
+    })
   }
 });
 
-export const { reset } = authSlice.actions;
+export const { reset, updateUserInfo } = authSlice.actions;
 export default authSlice.reducer

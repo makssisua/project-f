@@ -1,14 +1,13 @@
-import React, { ReactElement, useMemo } from 'react'
+import React, { ReactElement } from 'react'
 import IconLogo from '../../assets/IconLogo'
-import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../../store/slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
 
 export default function Navigation(): ReactElement  {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch();
   const navigate = useNavigate()
-  const  { user } = useSelector((state: GlobalState) => state.auth)
-  console.log('--->', user)
+  const  { user } = useAppSelector((state: GlobalState) => state.auth)
 
   const handleLogout = () => {
     dispatch(logout())
@@ -64,4 +63,4 @@ export default function Navigation(): ReactElement  {
       </div>
     </nav>
   )
-}
+};

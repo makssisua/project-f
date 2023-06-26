@@ -1,6 +1,5 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,19 +7,20 @@ import { signupValidationSchema } from './validation/signupValidation';
 import IconPasswordHidde from '../assets/IconPasswordHidden';
 import IconPasswordVisible from '../assets/IconPasswordVisible';
 import { registerUser, reset } from '../store/slices/authSlice';
+import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 
 function Signup(): ReactElement {
   const { register, handleSubmit, formState: { errors } } = useForm<SignupValidation>({
     resolver: yupResolver(signupValidationSchema)
   });
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [authError, setAuthError] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+  const [authError, setAuthError] = useState<string>('')
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector((state: GlobalState) => state.auth);
+  const { user, isLoading, isError, isSuccess, message } = useAppSelector((state: GlobalState) => state.auth);
  
   useEffect(() => {
     if(isError){
@@ -36,7 +36,7 @@ function Signup(): ReactElement {
 
   const onSubmit: SubmitHandler<SignupInputs> = (date: SignupInputs) => { 
     const { firstName, lastName, email, password } = date
-    console.log('-->', date) 
+
     const userDataFromInputs: SignupInputs = {
       firstName,
       lastName,
@@ -138,8 +138,8 @@ function Signup(): ReactElement {
               type="password"
             />
           <p className='text-red-600 text-xs'>{errors.confirmPassword?.message}</p>
+          <p className='text-red-600 text-xs'>{authError}</p>
         </div>
-        <p className='text-red-600 text-xs'>{authError}</p>
         <div className="flex flex-col items-center">
           <button
             className="mb-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

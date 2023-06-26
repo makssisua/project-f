@@ -24,7 +24,7 @@ const userSchema = mongoose.Schema({
   },
   paymentStatus: {
     type: String,
-    default: 'none'
+    default: 'notPaid'
   },
 }, {
   timestamps: true,
