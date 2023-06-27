@@ -6,6 +6,7 @@ import Login from './components/Login';
 import Home from './components/homepage/Home';
 import PageNotFound from './components/PageNotFound';
 import PrivateRoute from './components/utils/PrivateRoute';
+import AdminPanel from './components/admin/AdminPanel';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             </PrivateRoute>
             }
           />
+          <Route path='/admin' element={<AdminPanel />} />
           <Route path='/login' element={<Login />} />
           <Route path='/signup' element={<Signup />} />
           <Route path="*" element={<PageNotFound />} />
