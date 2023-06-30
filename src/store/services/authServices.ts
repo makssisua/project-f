@@ -1,12 +1,12 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import axios, { AxiosResponse } from "axios";
-import { useAppDispatch } from "../store/hooks";
-import { updateUserInfo } from "../store/slices/authSlice";
+import { useAppDispatch } from "../hooks";
+import { updateUserInfo } from "../slices/authSlice";
 
 const API_URL = '/api/users';
 
 // Register user
-const register = async (userDate: SignupInputs): Promise<User | undefined> => {
+const register = async (userDate: SignupInputs): Promise<User> => {
   const response: AxiosResponse<User> = await axios.post(API_URL, userDate);
 
   if (response.data) {
@@ -17,7 +17,7 @@ const register = async (userDate: SignupInputs): Promise<User | undefined> => {
 };
 
 // Login user
-const login = async (userDate: LoginInputs): Promise<User | undefined> => {
+const login = async (userDate: LoginInputs): Promise<User> => {
   const response: AxiosResponse<User> = await axios.post(API_URL + '/login', userDate);
 
   if (response.data) {
@@ -39,8 +39,6 @@ const getMe = async (token: string) => {
       'Authorization': 'Bearer ' + token
     }
   });
-
-  console.log('response.data->', response.data);
 
   const localUserRole = localUserInfo.role;
   const serverUserRole = response.data.role;
