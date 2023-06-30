@@ -10,6 +10,7 @@ function TrainingDatePicker({ startDate, setStartDate }) {
     <DatePicker
       fixedHeight
       locale="uk"
+      withPortal
       dateFormat="dd / MMMM / yyyy"
       todayButton="Сьогодні"
       selected={startDate} 

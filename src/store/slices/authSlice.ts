@@ -4,14 +4,6 @@ import authServices from '../services/authServices';
 const storedUser = localStorage.getItem('user');
 const user: User | null = storedUser ? JSON.parse(storedUser) : null;
 
-const initialState: AuthState = {
-  user: user,
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: ''
-};
-
 // Register user
 export const registerUser = createAsyncThunk<User, SignupInputs, { rejectValue: any }>('auth/register', async (user, { rejectWithValue }) => {
   try {
@@ -61,6 +53,14 @@ export const getMe = createAsyncThunk<User, string, { rejectValue: any }>('auth/
     return rejectWithValue(message)
   }
 });
+
+const initialState: AuthState = {
+  user: user,
+  isError: false,
+  isSuccess: false,
+  isLoading: false,
+  message: ''
+};
 
 export const authSlice = createSlice({
   name: 'auth',

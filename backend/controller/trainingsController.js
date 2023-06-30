@@ -23,7 +23,7 @@ const addTraining = asyncHandler(async (req, res) => {
     name: req.body.name,
     startDay: req.body.startDay,
     videoUrl: req.body.videoUrl,
-    description:req.body.description,
+    description: req.body.description,
   });
   
   res.status(200).json(training)

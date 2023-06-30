@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import TrainingDatePicker from '../DatePicker';
+import { useAppDispatch } from '../../../store/hooks';
+import { addTraining } from '../../../store/slices/trainingsSlice';
 
 function CreateTraining() {
   const [addTraininVisible, setAddTraininVisible] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [trainingState, setTrainingState] = useState({
-    title: '',
+    name: '',
     description: '',
     videoUrl: ''
   });
+  const dispatch = useAppDispatch();
 
   const onChangeHandler = (e: any) => {
     const fieldName = e.target.name
@@ -20,8 +23,19 @@ function CreateTraining() {
 
   const onSubmitHandler = (e: any) => {
     e.preventDefault()
-    // setAddTraininVisible(false);
-    console.log({...trainingState, startDate})
+    const newTrainingDate: AddTrainingInputs = {
+      ...trainingState, 
+      startDay: startDate.toDateString()
+    };
+    dispatch(addTraining(newTrainingDate))
+    setAddTraininVisible(false);
+    setTrainingState({
+      name: '',
+      description: '',
+      videoUrl: ''
+    });
+
+    console.log(newTrainingDate)
   }
 
   return (
@@ -30,16 +44,16 @@ function CreateTraining() {
           ?<form>
             <div className="relative z-0 w-full mb-6 group">
               <input
-                value={trainingState.title}
+                value={trainingState.name}
                 onChange={onChangeHandler}
                 type="text"
-                name="title"
-                id="title"
+                name="name"
+                id="name"
                 className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" "
                 required
               />
-              <label htmlFor="title" className="truncate peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              <label htmlFor="name" className="truncate peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600  peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
                 Заголовок ( назва тренування )
               </label>
             </div>

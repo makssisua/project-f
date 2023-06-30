@@ -1,5 +1,6 @@
 import React from 'react'
 import CreateTraining from './training/CreateTraining'
+import TrainingList from './training/TrainingList'
 
 interface Props {
   activeTab: string,
@@ -9,7 +10,12 @@ function AdminTabContentComponent({ activeTab }: Props) {
   switch (activeTab) {
     case 'tab1':
       return (
-        <CreateTraining />
+        <>
+          <div className='mb-10'>
+            <CreateTraining />
+          </div>
+          <TrainingList />
+        </>
       )
     case 'tab2':
       return (<div>Tab2Content</div>)

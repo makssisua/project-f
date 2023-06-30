@@ -11,7 +11,6 @@ const trainingSchema = mongoose.Schema({
   },
   videoUrl: {
     type: String,
-    required: [true, 'Add training video url'],
   },
   description: {
     type: String,
